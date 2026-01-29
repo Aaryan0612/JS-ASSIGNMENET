@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+  </head>
+  <body>
+    <h2>Weather Checker</h2>
+
+    <input type="text" id="city" placeholder="Enter city name" />
+    <button onclick="getWeather()">Get Weather</button>
+
+    <p id="output"></p>
+
+    <script>
+      const apiKey = "cea3536c52f4fc9f8556021d7b03fe8a";
+
+      async function getWeather() {
+        const city = document.getElementById("city").value;
+
+        try {
+          // STEP 1: Convert city name → latitude & longitude
+          const geoResponse = await fetch(
+            `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`,
+          );
+
+          if (!geoResponse.ok) {
+            throw new Error("Geocoding failed");
+          }
+
+          const geoData = await geoResponse.json();
+
+          if (geoData.length === 0) {
+            throw new Error("City not found");
+          }
+
+          const { lat, lon } = geoData[0];
+
+          // STEP 2: Fetch weather using coordinates
+          const weatherResponse = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`,
+          );
+
+          if (!weatherResponse.ok) {
+            throw new Error("Weather data not available");
+          }
+
+          const weatherData = await weatherResponse.json();
+          const temp = weatherData.main.temp;
+
+          document.getElementById("output").innerText =
+            `Temperature in ${city}: ${temp} °C`;
+        } catch (error) {
+          document.getElementById("output").innerText = error.message;
+        }
+      }
+    </script>
+  </body>
+</html>
