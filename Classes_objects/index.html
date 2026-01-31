@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Banking System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #444;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            /* Ensures padding doesn't affect width */
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+
+        #messageArea {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-container">
+        <header>
+            <h1>🏦 College Banking System</h1>
+        </header>
+
+        <div id="messageArea"></div>
+
+        <div class="content">
+            <!-- Section 1: Create Account -->
+            <div class="card">
+                <h2>1. Create New Account</h2>
+                <div class="form-group">
+                    <label>Account ID (Unique):</label>
+                    <input type="number" id="newId" placeholder="e.g. 101">
+                </div>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="newName" placeholder="e.g. John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number:</label>
+                    <input type="tel" id="newPhone" placeholder="e.g. 9876543210">
+                </div>
+                <div class="form-group">
+                    <label>Initial Deposit (₹):</label>
+                    <input type="number" id="newAmount" placeholder="e.g. 1000">
+                </div>
+                <button class="btn-primary" onclick="createAccount()">Create Account</button>
+            </div>
+
+            <!-- Section 2: Actions -->
+            <div class="card">
+                <h2>2. Account Operations</h2>
+                <div class="form-group">
+                    <label>Enter Account ID to Access:</label>
+                    <input type="number" id="actionId" placeholder="Enter ID here...">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-info" onclick="checkBalance()">Check Balance</button>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <label>Amount (for Withdraw/Deposit):</label>
+                    <input type="number" id="actionAmount" placeholder="Enter Amount">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-success" onclick="depositMoney()">Deposit (+)</button>
+                    <button class="btn-danger" onclick="withdrawMoney()">Withdraw (-)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: User List -->
+        <div style="padding: 20px; border-top: 1px solid #eee;">
+            <h2>📋 All Accounts Database</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Current Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="accountsTableBody">
+                    <!-- Rows will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
